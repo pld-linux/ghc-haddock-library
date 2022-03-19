@@ -6,7 +6,7 @@
 Summary:	Library exposing some functionality of Haddock
 Name:		ghc-%{pkgname}
 Version:	1.9.0
-Release:	1
+Release:	2
 License:	BSD-like
 Group:		Development/Languages
 #Source0Download: http://hackage.haskell.org/package/haddock-library

@@ -4,6 +4,7 @@
 #
 %define		pkgname	haddock-library
 Summary:	Library exposing some functionality of Haddock
+Summary(pl.UTF-8):	Biblioteka eksponująca część funkcjonalności Haddocka
 Name:		ghc-%{pkgname}
 Version:	1.9.0
 Release:	2
@@ -13,13 +14,32 @@ Group:		Development/Languages
 Source0:	http://hackage.haskell.org/package/%{pkgname}-%{version}/%{pkgname}-%{version}.tar.gz
 # Source0-md5:	27cbfc7dbd7f4294cee44c876bbc57f9
 URL:		http://hackage.haskell.org/package/haddock-library
-BuildRequires:	ghc >= 6.12.3
+BuildRequires:	ghc >= 7.4.1
+BuildRequires:	ghc-base >= 4.5
+BuildRequires:	ghc-base < 4.15
+BuildRequires:	ghc-bytestring >= 0.9.2.1
+BuildRequires:	ghc-containers >= 0.4.2.1
+BuildRequires:	ghc-parsec >= 3.1.13.0
+BuildRequires:	ghc-text >= 1.2.3.0
+BuildRequires:	ghc-transformers >= 0.3.0.0
 %if %{with prof}
-BuildRequires:	ghc-prof
+BuildRequires:	ghc-prof >= 7.4.1
+BuildRequires:	ghc-base-prof >= 4.5
+BuildRequires:	ghc-bytestring-prof >= 0.9.2.1
+BuildRequires:	ghc-containers-prof >= 0.4.2.1
+BuildRequires:	ghc-parsec-prof >= 3.1.13.0
+BuildRequires:	ghc-text-prof >= 1.2.3.0
+BuildRequires:	ghc-transformers-prof >= 0.3.0.0
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.608
 %requires_eq	ghc
 Requires(post,postun):	/usr/bin/ghc-pkg
+Requires:	ghc-base >= 4.5
+Requires:	ghc-bytestring >= 0.9.2.1
+Requires:	ghc-containers >= 0.4.2.1
+Requires:	ghc-parsec >= 3.1.13.0
+Requires:	ghc-text >= 1.2.3.0
+Requires:	ghc-transformers >= 0.3.0.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 # debuginfo is not useful for ghc
@@ -32,18 +52,30 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Haddock is a documentation-generation tool for Haskell libraries.
 These modules expose some functionality of it without pulling in the
 GHC dependency. Please note that the API is likely to change so be
-sure to specify upper bounds in your projects. For interacting with
-Haddock itself, see the haddock package.
+sure to specify upper bounds in your projects.
+
+%description -l pl.UTF-8
+Haddock to narzędzie do generowania dokumentacji dla bibliotek
+Haskella. Moduły te eksponują pewną funkcjonalność bez ciągnięcia za
+sobą zależności od GHC. Należy zauważyć, że API prawdopodobnie się
+zmieni, więc w projektach należy ustawiać górne ograniczenie wersji.
 
 %package prof
 Summary:	Profiling %{pkgname} library for GHC
 Summary(pl.UTF-8):	Biblioteka profilująca %{pkgname} dla GHC
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	ghc-prof >= 7.4.1
+Requires:	ghc-base-prof >= 4.5
+Requires:	ghc-bytestring-prof >= 0.9.2.1
+Requires:	ghc-containers-prof >= 0.4.2.1
+Requires:	ghc-parsec-prof >= 3.1.13.0
+Requires:	ghc-text-prof >= 1.2.3.0
+Requires:	ghc-transformers-prof >= 0.3.0.0
 
 %description prof
-Profiling %{pkgname} library for GHC.  Should be installed when
-GHC's profiling subsystem is needed.
+Profiling %{pkgname} library for GHC. Should be installed when GHC's
+profiling subsystem is needed.
 
 %description prof -l pl.UTF-8
 Biblioteka profilująca %{pkgname} dla GHC. Powinna być zainstalowana
@@ -61,6 +93,7 @@ runhaskell Setup.hs configure -v2 \
 	--docdir=%{_docdir}/%{name}-%{version}
 
 runhaskell Setup.hs build
+
 runhaskell Setup.hs haddock --executables
 
 %install
@@ -91,7 +124,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc CHANGES.md %{name}-%{version}-doc/*
 %{_libdir}/%{ghcdir}/package.conf.d/%{pkgname}.conf
 %dir %{_libdir}/%{ghcdir}/%{pkgname}-%{version}
-%{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
+%attr(755,root,root) %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.so
 %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*.a
 %exclude %{_libdir}/%{ghcdir}/%{pkgname}-%{version}/*_p.a
 
